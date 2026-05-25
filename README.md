@@ -1,6 +1,6 @@
 # Playwright UI Interactions
 
-[![Playwright Tests](https://github.com/<your-username>/playwright-ui-interactions/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/playwright-ui-interactions/actions)
+[![Playwright Tests](https://github.com/ankursingh08/playwright-ui-interactions/actions/workflows/ci.yml/badge.svg)](https://github.com/ankursingh08/playwright-ui-interactions/actions)
 ![Playwright](https://img.shields.io/badge/Playwright-1.52+-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -14,7 +14,7 @@
 ```mermaid
 graph TB
     subgraph "Test Framework"
-        Tests["Test Specs<br/>9 spec files · 70+ tests"]
+        Tests["Test Specs<br/>9 spec files · 48 tests"]
         Fixtures["Custom Fixtures<br/>Auto-navigate & inject POs"]
         Pages["Page Objects<br/>9 page classes + base"]
         Helpers["Utilities<br/>Test data factory"]
@@ -61,7 +61,7 @@ graph TB
 
 ```bash
 # Clone
-git clone https://github.com/<your-username>/playwright-ui-interactions.git
+git clone https://github.com/ankursingh08/playwright-ui-interactions.git
 cd playwright-ui-interactions
 
 # Install
@@ -107,7 +107,7 @@ playwright-ui-interactions/
 ├── src/
 │   ├── tests/                        # One spec per interaction category
 │   ├── pages/                        # Page objects (1 per page + base)
-│   ├── fixtures/page.fixtures.ts     # Custom fixtures: auto-navigate + inject POs
+│   ├── fixtures/fixture.ts           # Custom fixtures: auto-navigate + inject POs
 │   ├── utils/test-data.helper.ts     # Test file factory for upload tests
 │   └── types/app.types.ts            # Shared TypeScript interfaces
 ├── .github/workflows/ci.yml          # GitHub Actions pipeline
@@ -166,13 +166,21 @@ The GitHub Actions workflow:
 **Add a new interaction category:**
 1. Create HTML page in `apps/web/public/pages/`
 2. Create page object in `src/pages/`
-3. Register in `src/fixtures/page.fixtures.ts`
+3. Register in `src/fixtures/fixture.ts`
 4. Write tests in `src/tests/`
 5. Add card to homepage `index.html`
 
 **Add more browsers:** Edit `playwright.config.ts` projects array.
 
 **Add API endpoints:** Add routes to `apps/web/src/server.js`.
+
+---
+
+## Notable Challenges
+
+- **Clipboard API Automation**: Testing clipboard functionality required handling browser permissions and using cross-platform key combinations (like `ControlOrMeta`) to ensure tests pass on both macOS and Windows/Linux.
+- **Asynchronous Dialog Handling**: Managing browser alerts, confirms, and prompts required a proactive listener approach (`page.on('dialog')`) to avoid race conditions during rapid UI interactions.
+- **Complex Navigation & Frames**: Coordinating tests across nested iframes and multiple browser windows required precise use of `frameLocator` and `waitForEvent('page')` to maintain test stability.
 
 ---
 
