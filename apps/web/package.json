@@ -1,0 +1,13 @@
+{
+  "name": "ui-interactions-app",
+  "version": "1.0.0",
+  "description": "Purpose-built test target app for UI interaction automation",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}

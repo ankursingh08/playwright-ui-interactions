@@ -1,0 +1,30 @@
+{
+  "name": "playwright-ui-interactions",
+  "version": "1.0.0",
+  "description": "Comprehensive demonstration of automating every UI interaction pattern with Playwright + TypeScript",
+  "license": "MIT",
+  "scripts": {
+    "app:start": "node apps/web/src/server.js",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:debug": "npx playwright test --debug",
+    "test:report": "npx playwright show-report reports/html",
+    "lint": "eslint 'src/**/*.ts' --max-warnings 0",
+    "format": "prettier --write 'src/**/*.ts' 'apps/**/*.{js,html,css}'",
+    "format:check": "prettier --check 'src/**/*.ts' 'apps/**/*.{js,html,css}'"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}

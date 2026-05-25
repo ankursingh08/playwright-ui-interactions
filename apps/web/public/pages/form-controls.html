@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Form Controls</title><link rel="stylesheet" href="/css/styles.css"/></head>
+<body>
+  <nav class="nav"><div class="nav-links"><a href="/" class="nav-brand">UI Interactions</a><a href="/pages/basic-clicks.html">Clicks</a><a href="/pages/text-input.html">Text Input</a><a href="/pages/form-controls.html">Forms</a><a href="/pages/keyboard-mouse.html">Keyboard</a><a href="/pages/dialogs.html">Dialogs</a><a href="/pages/frames-windows.html">Frames</a><a href="/pages/dynamic-content.html">Dynamic</a><a href="/pages/file-operations.html">Files</a><a href="/pages/clipboard.html">Clipboard</a></div></nav>
+  <div class="container">
+    <div class="page-header"><h1>Form Controls</h1><p>Checkboxes, radios, selects, date pickers, range sliders, and toggle switches.</p></div>
+
+    <div class="section"><h2>Checkboxes</h2>
+      <div class="checkbox-group" data-testid="checkbox-group">
+        <label><input type="checkbox" data-testid="cb-javascript" value="javascript" onchange="updateCb()"/> JavaScript</label>
+        <label><input type="checkbox" data-testid="cb-typescript" value="typescript" onchange="updateCb()"/> TypeScript</label>
+        <label><input type="checkbox" data-testid="cb-python" value="python" onchange="updateCb()"/> Python</label>
+        <label><input type="checkbox" data-testid="cb-go" value="go" onchange="updateCb()"/> Go</label></div>
+      <div class="output" data-testid="checkbox-output">Selected: none</div></div>
+
+    <div class="section"><h2>Select All Pattern</h2>
+      <div class="flex gap-sm mt-sm" style="margin-bottom:0.75rem"><button data-testid="check-all-btn" onclick="checkAll(true)">Check All</button><button data-testid="uncheck-all-btn" onclick="checkAll(false)">Uncheck All</button></div>
+      <div class="checkbox-group" data-testid="bulk-checkbox-group">
+        <label><input type="checkbox" class="bulk-cb" value="item1" onchange="updateBulk()"/> Item 1</label>
+        <label><input type="checkbox" class="bulk-cb" value="item2" onchange="updateBulk()"/> Item 2</label>
+        <label><input type="checkbox" class="bulk-cb" value="item3" onchange="updateBulk()"/> Item 3</label>
+        <label><input type="checkbox" class="bulk-cb" value="item4" onchange="updateBulk()"/> Item 4</label></div>
+      <div class="output" data-testid="bulk-checkbox-output">Checked: 0 of 4</div></div>
+
+    <div class="section"><h2>Radio Buttons</h2>
+      <div class="radio-group" data-testid="radio-group">
+        <label><input type="radio" name="framework" data-testid="radio-playwright" value="playwright" onchange="updateRadio()"/> Playwright</label>
+        <label><input type="radio" name="framework" data-testid="radio-cypress" value="cypress" onchange="updateRadio()"/> Cypress</label>
+        <label><input type="radio" name="framework" data-testid="radio-selenium" value="selenium" onchange="updateRadio()"/> Selenium</label>
+        <label><input type="radio" name="framework" data-testid="radio-puppeteer" value="puppeteer" onchange="updateRadio()"/> Puppeteer</label></div>
+      <div class="output" data-testid="radio-output">Selected: none</div></div>
+
+    <div class="section"><h2>Dropdown Select</h2>
+      <div class="form-group"><label for="single-select">Choose a country</label>
+        <select id="single-select" data-testid="single-select" onchange="updateSelect()">
+          <option value="">-- Select --</option><option value="us">United States</option><option value="uk">United Kingdom</option><option value="de">Germany</option><option value="jp">Japan</option><option value="in">India</option></select></div>
+      <div class="output" data-testid="select-output">Selected: none</div></div>
+
+    <div class="section"><h2>Multi-Select</h2>
+      <div class="form-group"><label for="multi-select">Select technologies (hold Ctrl/Cmd)</label>
+        <select id="multi-select" data-testid="multi-select" multiple size="5" onchange="updateMulti()" style="max-width:400px">
+          <option value="html">HTML</option><option value="css">CSS</option><option value="javascript">JavaScript</option><option value="typescript">TypeScript</option><option value="react">React</option><option value="node">Node.js</option></select></div>
+      <div class="output" data-testid="multi-select-output">Selected: none</div></div>
+
+    <div class="section"><h2>Date Input</h2>
+      <div class="form-group"><label for="date-input">Select a date</label><input type="date" id="date-input" data-testid="date-input" onchange="document.querySelector('[data-testid=date-output]').textContent=this.value?'Selected: '+this.value:'Selected: none'"/></div>
+      <div class="output" data-testid="date-output">Selected: none</div></div>
+
+    <div class="section"><h2>Range Slider</h2>
+      <div class="form-group"><label>Volume: <span data-testid="range-value">50</span>%</label>
+        <input type="range" data-testid="range-input" min="0" max="100" value="50" oninput="document.querySelector('[data-testid=range-value]').textContent=this.value"/></div></div>
+
+    <div class="section"><h2>Toggle Switch</h2>
+      <div class="flex gap-md" style="align-items:center">
+        <label class="toggle-switch"><input type="checkbox" data-testid="toggle-switch" onchange="document.querySelector('[data-testid=toggle-output]').textContent=this.checked?'ON':'OFF'"/><span class="toggle-slider"></span></label>
+        <span data-testid="toggle-output">OFF</span></div></div>
+
+    <div class="section"><h2>Complete Form</h2>
+      <form data-testid="complete-form" onsubmit="handleSubmit(event)">
+        <div class="form-group"><label for="form-name">Full Name</label><input type="text" id="form-name" data-testid="form-name" required placeholder="John Doe"/></div>
+        <div class="form-group"><label for="form-email">Email</label><input type="email" id="form-email" data-testid="form-email" required placeholder="john@example.com"/></div>
+        <div class="form-group"><label for="form-role">Role</label><select id="form-role" data-testid="form-role" required><option value="">-- Select Role --</option><option value="developer">Developer</option><option value="designer">Designer</option><option value="manager">Manager</option><option value="qa">QA Engineer</option></select></div>
+        <div class="form-group"><label><input type="checkbox" data-testid="form-terms" required/> I agree to the terms</label></div>
+        <button type="submit" data-testid="form-submit" class="btn-primary">Submit</button></form>
+      <div class="output" data-testid="form-output"></div></div>
+  </div>
+  <script>
+    function updateCb(){const c=[...document.querySelectorAll('[data-testid=checkbox-group] input:checked')].map(i=>i.value);document.querySelector('[data-testid=checkbox-output]').textContent=c.length?'Selected: '+c.join(', '):'Selected: none'}
+    function checkAll(s){document.querySelectorAll('.bulk-cb').forEach(c=>c.checked=s);updateBulk()}
+    function updateBulk(){const t=document.querySelectorAll('.bulk-cb').length;const c=document.querySelectorAll('.bulk-cb:checked').length;document.querySelector('[data-testid=bulk-checkbox-output]').textContent='Checked: '+c+' of '+t}
+    function updateRadio(){const s=document.querySelector('input[name=framework]:checked');document.querySelector('[data-testid=radio-output]').textContent=s?'Selected: '+s.value:'Selected: none'}
+    function updateSelect(){const s=document.getElementById('single-select');document.querySelector('[data-testid=select-output]').textContent=s.value?'Selected: '+s.options[s.selectedIndex].text:'Selected: none'}
+    function updateMulti(){const s=[...document.getElementById('multi-select').selectedOptions].map(o=>o.text);document.querySelector('[data-testid=multi-select-output]').textContent=s.length?'Selected: '+s.join(', '):'Selected: none'}
+    function handleSubmit(e){e.preventDefault();const n=document.getElementById('form-name').value;const em=document.getElementById('form-email').value;const r=document.getElementById('form-role').value;document.querySelector('[data-testid=form-output]').textContent='Submitted: '+n+', '+em+', '+r}
+  </script>
+</body>
+</html>

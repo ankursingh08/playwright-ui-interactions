@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><title>Iframe Content</title>
+<style>body{font-family:system-ui;background:#1a1d27;color:#e1e4ed;padding:1rem;margin:0}h3{color:#6c72cb;margin-bottom:0.5rem;font-size:0.95rem}button{padding:0.4rem 0.75rem;border:1px solid #2e3345;background:#242836;color:#e1e4ed;border-radius:6px;cursor:pointer;font-size:0.85rem}input{padding:0.4rem 0.6rem;border:1px solid #2e3345;background:#0f1117;color:#e1e4ed;border-radius:6px;font-size:0.85rem;width:200px}.output{background:#0f1117;border:1px solid #2e3345;border-radius:6px;padding:0.5rem;margin-top:0.5rem;font-family:monospace;font-size:0.8rem;color:#34d399}</style></head>
+<body>
+  <h3>Inside Iframe</h3>
+  <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem">
+    <input type="text" data-testid="iframe-input" placeholder="Type inside iframe"/>
+    <button data-testid="iframe-btn" onclick="document.querySelector('[data-testid=iframe-output]').textContent='Clicked! Input value: \u0022'+document.querySelector('[data-testid=iframe-input]').value+'\u0022'">Click Me</button></div>
+  <div class="output" data-testid="iframe-output">Waiting for interaction...</div>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Interactions — UI Interactions</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Basic Interactions</h1>
+      <p>Click, double-click, right-click, fill, clear, type, focus &amp; blur</p>
+      <nav><a href="/">← Home</a></nav>
+    </header>
+
+    <main>
+      <!-- Single Click -->
+      <div class="section" data-testid="section-single-click">
+        <h2>Single Click</h2>
+        <div class="row">
+          <button data-testid="single-click-btn" onclick="handleSingleClick()">Click Me</button>
+          <span class="output" data-testid="single-click-output"></span>
+        </div>
+      </div>
+
+      <!-- Double Click -->
+      <div class="section" data-testid="section-double-click">
+        <h2>Double Click</h2>
+        <div class="row">
+          <button data-testid="double-click-btn" ondblclick="handleDoubleClick()">Double-Click Me</button>
+          <span class="output" data-testid="double-click-output"></span>
+        </div>
+      </div>
+
+      <!-- Right Click -->
+      <div class="section" data-testid="section-right-click">
+        <h2>Right Click</h2>
+        <div class="row">
+          <button data-testid="right-click-btn" oncontextmenu="handleRightClick(event)">Right-Click Me</button>
+          <span class="output" data-testid="right-click-output"></span>
+        </div>
+        <div class="context-menu" data-testid="custom-context-menu" style="display: none;">
+          <button data-testid="ctx-option-edit" onclick="selectContextOption('Edit')">Edit</button>
+          <button data-testid="ctx-option-delete" onclick="selectContextOption('Delete')">Delete</button>
+          <button data-testid="ctx-option-copy" onclick="selectContextOption('Copy')">Copy</button>
+        </div>
+      </div>
+
+      <!-- Force Click -->
+      <div class="section" data-testid="section-force-click">
+        <h2>Force Click (Covered Element)</h2>
+        <p class="hint">The button below is covered by an overlay. Use <code>force: true</code> to click it.</p>
+        <div style="position: relative; display: inline-block;">
+          <button data-testid="force-click-btn" onclick="handleForceClick()">Hidden Button</button>
+          <div data-testid="overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.5); pointer-events: auto;"></div>
+        </div>
+        <div class="output" data-testid="force-click-output"></div>
+      </div>
+
+      <!-- Click with Modifiers -->
+      <div class="section" data-testid="section-modifier-click">
+        <h2>Click with Modifiers</h2>
+        <button data-testid="modifier-click-btn" onclick="handleModifierClick(event)">Click with Modifier</button>
+        <div class="output" data-testid="modifier-click-output"></div>
+      </div>
+
+      <!-- Fill & Clear -->
+      <div class="section" data-testid="section-fill-clear">
+        <h2>Fill &amp; Clear</h2>
+        <div class="field">
+          <label for="fill-input">Text Input</label>
+          <input type="text" id="fill-input" data-testid="fill-input" placeholder="Type something..." />
+        </div>
+        <div class="field">
+          <label for="fill-textarea">Textarea</label>
+          <textarea id="fill-textarea" data-testid="fill-textarea" placeholder="Enter multi-line text..."></textarea>
+        </div>
+        <div class="row" style="margin-top: 0.75rem;">
+          <button data-testid="clear-all-btn" onclick="handleClearAll()">Clear All</button>
+          <span class="output" data-testid="fill-output"></span>
+        </div>
+      </div>
+
+      <!-- Type (character by character) -->
+      <div class="section" data-testid="section-type">
+        <h2>Type (Character-by-Character)</h2>
+        <p class="hint">Tracks each keydown event to prove characters arrive sequentially.</p>
+        <div class="field">
+          <label for="type-input">Type slowly here</label>
+          <input type="text" id="type-input" data-testid="type-input" placeholder="Watch keystrokes below..." />
+        </div>
+        <div class="output" data-testid="type-keylog"></div>
+      </div>
+
+      <!-- Focus & Blur -->
+      <div class="section" data-testid="section-focus-blur">
+        <h2>Focus &amp; Blur</h2>
+        <div class="field">
+          <label for="focus-input">Focus this field</label>
+          <input type="text" id="focus-input" data-testid="focus-input" placeholder="Click or tab here..."
+            onfocus="handleFocus()" onblur="handleBlur()" />
+        </div>
+        <div class="output" data-testid="focus-output"></div>
+      </div>
+
+      <!-- Input Event Tracking -->
+      <div class="section" data-testid="section-input-events">
+        <h2>Input Event Tracking</h2>
+        <p class="hint">Tracks input, change, and keyup events on a single field.</p>
+        <div class="field">
+          <label for="event-input">Type and tab away</label>
+          <input type="text" id="event-input" data-testid="event-input" placeholder="Events logged below..." />
+        </div>
+        <div class="output" data-testid="event-log"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* Single Click */
+    let clickCount = 0;
+    function handleSingleClick() {
+      clickCount++;
+      document.querySelector('[data-testid="single-click-output"]').textContent =
+        `Clicked ${clickCount} time(s)`;
+    }
+
+    /* Double Click */
+    function handleDoubleClick() {
+      document.querySelector('[data-testid="double-click-output"]').textContent =
+        'Double-click detected!';
+    }
+
+    /* Right Click */
+    function handleRightClick(e) {
+      e.preventDefault();
+      const menu = document.querySelector('[data-testid="custom-context-menu"]');
+      menu.style.display = 'block';
+      menu.style.left = e.clientX + 'px';
+      menu.style.top = e.clientY + 'px';
+      document.querySelector('[data-testid="right-click-output"]').textContent = 'Context menu opened';
+    }
+
+    function selectContextOption(option) {
+      document.querySelector('[data-testid="right-click-output"]').textContent = `Selected: ${option}`;
+      document.querySelector('[data-testid="custom-context-menu"]').style.display = 'none';
+    }
+
+    document.addEventListener('click', () => {
+      document.querySelector('[data-testid="custom-context-menu"]').style.display = 'none';
+    });
+
+    /* Force Click */
+    function handleForceClick() {
+      document.querySelector('[data-testid="force-click-output"]').textContent = 'Force click succeeded!';
+    }
+
+    /* Modifier Click */
+    function handleModifierClick(e) {
+      const mods = [];
+      if (e.ctrlKey || e.metaKey) mods.push('Ctrl/Meta');
+      if (e.shiftKey) mods.push('Shift');
+      if (e.altKey) mods.push('Alt');
+      document.querySelector('[data-testid="modifier-click-output"]').textContent =
+        mods.length > 0 ? `Modifiers: ${mods.join(' + ')}` : 'No modifiers held';
+    }
+
+    /* Fill & Clear */
+    const fillInput = document.getElementById('fill-input');
+    const fillTextarea = document.getElementById('fill-textarea');
+    const fillOutput = document.querySelector('[data-testid="fill-output"]');
+
+    function updateFillOutput() {
+      const val = fillInput.value + fillTextarea.value;
+      fillOutput.textContent = val ? `Length: ${val.length}` : '';
+    }
+    fillInput.addEventListener('input', updateFillOutput);
+    fillTextarea.addEventListener('input', updateFillOutput);
+
+    function handleClearAll() {
+      fillInput.value = '';
+      fillTextarea.value = '';
+      fillOutput.textContent = 'Cleared';
+    }
+
+    /* Type (Character-by-character) */
+    const typeInput = document.getElementById('type-input');
+    const typeKeylog = document.querySelector('[data-testid="type-keylog"]');
+    const keys = [];
+    typeInput.addEventListener('keydown', (e) => {
+      if (e.key.length === 1 || e.key === 'Backspace') {
+        keys.push(e.key);
+        typeKeylog.textContent = keys.join(' → ');
+      }
+    });
+
+    /* Focus & Blur */
+    const focusOutput = document.querySelector('[data-testid="focus-output"]');
+    function handleFocus() { focusOutput.textContent = 'State: focused'; }
+    function handleBlur() { focusOutput.textContent = 'State: blurred'; }
+
+    /* Input Event Tracking */
+    const eventInput = document.getElementById('event-input');
+    const eventLog = document.querySelector('[data-testid="event-log"]');
+    const eventEntries = [];
+    ['input', 'change', 'keyup'].forEach((type) => {
+      eventInput.addEventListener(type, (e) => {
+        eventEntries.push(`${type}: "${e.target.value}"`);
+        eventLog.textContent = eventEntries.slice(-6).join('\n');
+      });
+    });
+  </script>
+</body>
+</html>

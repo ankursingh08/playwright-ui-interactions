@@ -1,0 +1,18 @@
+node_modules/
+dist/
+reports/
+apps/web/uploads/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.*
+
+# Playwright defaults
+playwright-report/
+blob-report/
+test-results/

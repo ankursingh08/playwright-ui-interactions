@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><title>Inner Iframe</title>
+<style>
+  body{font-family:system-ui;background:#252839;color:#e1e4ed;padding:0.5rem;margin:0}
+  button{padding:0.3rem 0.6rem;border:1px solid #2e3345;background:#2e3345;color:#e1e4ed;border-radius:6px;cursor:pointer;font-size:0.8rem}
+  .output{background:#0f1117;border:1px solid #2e3345;border-radius:6px;padding:0.4rem;font-family:monospace;font-size:0.75rem;color:#34d399;margin-top:0.4rem}
+</style>
+</head>
+<body>
+  <button data-testid="nested-btn" onclick="document.querySelector('[data-testid=nested-output]').textContent='Nested button clicked!'">Click in nested iframe</button>
+  <div class="output" data-testid="nested-output">Waiting...</div>
+</body>
+</html>

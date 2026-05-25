@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Dynamic Content</title><link rel="stylesheet" href="/css/styles.css"/></head>
+<body>
+  <nav class="nav"><div class="nav-links"><a href="/" class="nav-brand">UI Interactions</a><a href="/pages/basic-clicks.html">Clicks</a><a href="/pages/text-input.html">Text Input</a><a href="/pages/form-controls.html">Forms</a><a href="/pages/keyboard-mouse.html">Keyboard</a><a href="/pages/dialogs.html">Dialogs</a><a href="/pages/frames-windows.html">Frames</a><a href="/pages/dynamic-content.html">Dynamic</a><a href="/pages/file-operations.html">Files</a><a href="/pages/clipboard.html">Clipboard</a></div></nav>
+  <div class="container">
+    <div class="page-header"><h1>Dynamic Content</h1><p>Auto-complete, infinite scroll, lazy loading, debounced input, and timed content.</p></div>
+
+    <div class="section"><h2>Auto-Complete Search</h2>
+      <div class="autocomplete-wrapper"><label for="search-input">Search programming languages &amp; tools</label>
+        <input type="search" id="search-input" data-testid="autocomplete-input" placeholder="Start typing..." autocomplete="off"/>
+        <div id="ac-dropdown" class="autocomplete-list hidden" data-testid="autocomplete-list"></div></div>
+      <div class="output" data-testid="autocomplete-output">Selected: none</div></div>
+
+    <div class="section"><h2>Debounced Input</h2>
+      <div class="form-group"><label for="debounce-input">Search (triggers 500ms after you stop typing)</label><input type="text" id="debounce-input" data-testid="debounce-input" placeholder="Type and wait..."/></div>
+      <div class="output" data-testid="debounce-output">Waiting for input...</div></div>
+
+    <div class="section"><h2>Delayed Content</h2>
+      <button data-testid="load-content-btn" onclick="loadDelayed()">Load Content</button>
+      <div data-testid="loading-indicator" class="hidden" style="margin-top:0.75rem;color:var(--muted)">Loading...</div>
+      <div data-testid="delayed-content" class="hidden output">Content loaded successfully!</div></div>
+
+    <div class="section"><h2>Conditional Display</h2>
+      <div class="flex gap-sm" style="margin-bottom:0.75rem">
+        <button data-testid="show-success" onclick="showNotif('success','Operation completed successfully!')">Show Success</button>
+        <button data-testid="show-error" onclick="showNotif('error','An error occurred. Please try again.')">Show Error</button>
+        <button data-testid="show-warning" onclick="showNotif('warning','Warning: This action cannot be undone.')">Show Warning</button></div>
+      <div data-testid="notification" class="hidden output"></div></div>
+
+    <div class="section"><h2>Auto-Dismissing Toast</h2>
+      <button data-testid="toast-btn" onclick="showToast()">Show Toast (3s)</button>
+      <div data-testid="toast" class="hidden" style="margin-top:0.75rem;padding:0.75rem 1rem;background:var(--primary);border-radius:var(--radius);color:white;font-size:0.85rem">This toast will disappear in 3 seconds</div></div>
+
+    <div class="section"><h2>Infinite Scroll</h2>
+      <div class="scroll-container" data-testid="scroll-container" id="scroll-container"></div>
+      <div class="output" data-testid="scroll-status">Loaded: 0 items</div></div>
+
+    <div class="section"><h2>Lazy Loaded Element</h2>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:0.75rem">The element below is outside the viewport. Scroll down to trigger it.</p>
+      <div style="height:400px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:0.85rem">&#8595; Keep scrolling — lazy element is below &#8595;</div>
+      <div data-testid="lazy-target" id="lazy-target" style="min-height:80px;margin-top:1rem">
+        <div data-testid="lazy-placeholder" style="padding:1rem;background:var(--surface-hover);border-radius:var(--radius);color:var(--muted);font-size:0.85rem;text-align:center">
+          Waiting to enter viewport...
+        </div>
+      </div></div>
+  </div>
+  <script>
+    // Autocomplete
+    let acTimeout;
+    document.getElementById('search-input').addEventListener('input', function() {
+      clearTimeout(acTimeout);
+      const q = this.value;
+      const dd = document.getElementById('ac-dropdown');
+      if (q.length < 1) { dd.classList.add('hidden'); return; }
+      acTimeout = setTimeout(async () => {
+        try {
+          const r = await fetch('/api/search?q=' + encodeURIComponent(q));
+          const items = await r.json();
+          if (!items.length) { dd.classList.add('hidden'); return; }
+          dd.innerHTML = items.map(i => '<div class="autocomplete-item" data-testid="ac-option-' + i.toLowerCase() + '" onclick="selectAC(\'' + i + '\')">' + i + '</div>').join('');
+          dd.classList.remove('hidden');
+        } catch(e) { dd.classList.add('hidden'); }
+      }, 150);
+    });
+    function selectAC(v) {
+      document.getElementById('search-input').value = v;
+      document.getElementById('ac-dropdown').classList.add('hidden');
+      document.querySelector('[data-testid=autocomplete-output]').textContent = 'Selected: ' + v;
+    }
+
+    // Debounce
+    let debTimer;
+    document.getElementById('debounce-input').addEventListener('input', function() {
+      const o = document.querySelector('[data-testid=debounce-output]');
+      o.textContent = 'Typing...'; o.style.color = 'var(--warning)';
+      clearTimeout(debTimer);
+      const val = this.value;
+      debTimer = setTimeout(() => { o.textContent = 'Search triggered for: "' + val + '"'; o.style.color = 'var(--success)'; }, 500);
+    });
+
+    // Delayed content
+    function loadDelayed() {
+      const l = document.querySelector('[data-testid=loading-indicator]');
+      const c = document.querySelector('[data-testid=delayed-content]');
+      c.classList.add('hidden'); l.classList.remove('hidden');
+      setTimeout(() => { l.classList.add('hidden'); c.classList.remove('hidden'); }, 1500);
+    }
+
+    // Notifications
+    function showNotif(t, m) {
+      const el = document.querySelector('[data-testid=notification]');
+      const colors = { success: 'var(--success)', error: 'var(--danger)', warning: 'var(--warning)' };
+      el.textContent = m; el.style.color = colors[t]; el.setAttribute('data-type', t); el.classList.remove('hidden');
+    }
+
+    // Toast
+    function showToast() {
+      const t = document.querySelector('[data-testid=toast]');
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    // Infinite scroll
+    let currentPage = 1, isLoading = false;
+    const sc = document.getElementById('scroll-container');
+    async function loadItems() {
+      if (isLoading) return; isLoading = true;
+      const sp = document.createElement('div'); sp.className = 'loading-spinner';
+      sp.setAttribute('data-testid', 'scroll-loader'); sp.textContent = 'Loading more...'; sc.appendChild(sp);
+      try {
+        const r = await fetch('/api/items?page=' + currentPage + '&limit=10');
+        const d = await r.json(); sp.remove();
+        d.items.forEach(i => {
+          const div = document.createElement('div'); div.className = 'scroll-item';
+          div.setAttribute('data-testid', 'scroll-item-' + i.id);
+          div.innerHTML = '<strong>' + i.title + '</strong><br/><span style="color:var(--muted);font-size:0.8rem">' + i.description + '</span>';
+          sc.appendChild(div);
+        });
+        document.querySelector('[data-testid=scroll-status]').textContent = 'Loaded: ' + Math.min(currentPage * 10, 50) + ' items';
+        if (d.hasMore) currentPage++;
+      } catch(e) { sp.remove(); }
+      isLoading = false;
+    }
+    sc.addEventListener('scroll', () => {
+      const { scrollTop, scrollHeight, clientHeight } = sc;
+      if (scrollTop + clientHeight >= scrollHeight - 50) loadItems();
+    });
+    loadItems();
+
+    // Lazy loading
+    const lt = document.getElementById('lazy-target');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          // Show loading state immediately
+          lt.innerHTML = '<div data-testid="lazy-loading" style="padding:1rem;background:var(--surface-hover);border-radius:var(--radius);color:var(--warning);font-size:0.85rem;text-align:center">Loading...</div>';
+          // Then render actual content after delay
+          setTimeout(() => {
+            lt.innerHTML = '<div data-testid="lazy-loaded" style="padding:1rem;background:var(--surface-hover);border-radius:var(--radius);color:var(--success);text-align:center"><strong>Lazy content loaded!</strong><br/><span style="font-size:0.8rem;color:var(--muted)">This element loaded when it entered the viewport</span></div>';
+          }, 1000);
+          obs.unobserve(lt);
+        }
+      });
+    }, { threshold: 0.5 });
+    obs.observe(lt);
+  </script>
+</body>
+</html>

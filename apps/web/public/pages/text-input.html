@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Text Input</title><link rel="stylesheet" href="/css/styles.css"/></head>
+<body>
+  <nav class="nav"><div class="nav-links"><a href="/" class="nav-brand">UI Interactions</a><a href="/pages/basic-clicks.html">Clicks</a><a href="/pages/text-input.html">Text Input</a><a href="/pages/form-controls.html">Forms</a><a href="/pages/keyboard-mouse.html">Keyboard</a><a href="/pages/dialogs.html">Dialogs</a><a href="/pages/frames-windows.html">Frames</a><a href="/pages/dynamic-content.html">Dynamic</a><a href="/pages/file-operations.html">Files</a><a href="/pages/clipboard.html">Clipboard</a></div></nav>
+  <div class="container">
+    <div class="page-header"><h1>Text Input Interactions</h1><p>Fill, type character-by-character, clear, focus/blur events, and contenteditable elements.</p></div>
+
+    <div class="section"><h2>Basic Fill</h2>
+      <div class="form-group"><label for="basic-input">Name</label><input type="text" id="basic-input" data-testid="basic-input" placeholder="Enter your name"/></div>
+      <div class="form-group"><label for="email-input">Email</label><input type="email" id="email-input" data-testid="email-input" placeholder="user@example.com"/></div>
+      <div class="form-group"><label for="password-input">Password</label><input type="password" id="password-input" data-testid="password-input" placeholder="********"/></div></div>
+
+    <div class="section"><h2>Character-by-Character Typing</h2>
+      <div class="form-group"><label for="char-input">Type here</label><input type="text" id="char-input" data-testid="char-input" placeholder="Watch the keystrokes..."/></div>
+      <div class="output" data-testid="keystroke-log"></div></div>
+
+    <div class="section"><h2>Pre-filled Input (Clear &amp; Replace)</h2>
+      <div class="form-group"><label for="prefilled-input">Edit this value</label><input type="text" id="prefilled-input" data-testid="prefilled-input" value="Replace this text"/></div></div>
+
+    <div class="section"><h2>Focus &amp; Blur Events</h2>
+      <div class="form-group"><label for="focus-input">Focus on this field</label><input type="text" id="focus-input" data-testid="focus-input" placeholder="Click to focus..."/></div>
+      <div class="output" data-testid="focus-output">Waiting for focus...</div></div>
+
+    <div class="section"><h2>Textarea</h2>
+      <div class="form-group"><label for="textarea-input">Write a longer message</label><textarea id="textarea-input" data-testid="textarea-input" rows="4" placeholder="Enter multi-line text..."></textarea></div>
+      <div class="output" data-testid="textarea-char-count">Characters: 0</div></div>
+
+    <div class="section"><h2>Number Input</h2>
+      <div class="form-group"><label for="number-input">Quantity (1-100)</label><input type="number" id="number-input" data-testid="number-input" min="1" max="100" value="1"/></div></div>
+
+    <div class="section"><h2>Contenteditable Element</h2>
+      <div data-testid="contenteditable" contenteditable="true" style="padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--radius);min-height:80px;background:var(--bg);outline:none">Edit this rich text content</div>
+      <div class="output" data-testid="editable-output">Content length: 27</div></div>
+
+    <div class="section"><h2>Real-Time Validation</h2>
+      <div class="form-group"><label for="validated-input">Username (3-20 chars, alphanumeric only)</label><input type="text" id="validated-input" data-testid="validated-input" placeholder="Enter username"/></div>
+      <div class="output" data-testid="validation-message"></div></div>
+  </div>
+  <script>
+    const charInput=document.getElementById('char-input');const keyLog=[];
+    charInput.addEventListener('keydown',(e)=>{if(e.key.length===1||['Backspace','Enter','Tab','Escape'].includes(e.key)){keyLog.push(e.key);if(keyLog.length>20)keyLog.shift();document.querySelector('[data-testid=keystroke-log]').textContent='Keys: '+keyLog.join(', ')}});
+    const focusInput=document.getElementById('focus-input');
+    focusInput.addEventListener('focus',()=>{document.querySelector('[data-testid=focus-output]').textContent='Input is focused'});
+    focusInput.addEventListener('blur',()=>{document.querySelector('[data-testid=focus-output]').textContent='Input blurred. Value: "'+focusInput.value+'"'});
+    document.getElementById('textarea-input').addEventListener('input',(e)=>{document.querySelector('[data-testid=textarea-char-count]').textContent='Characters: '+e.target.value.length});
+    document.querySelector('[data-testid=contenteditable]').addEventListener('input',function(){document.querySelector('[data-testid=editable-output]').textContent='Content length: '+this.textContent.length});
+    document.getElementById('validated-input').addEventListener('input',function(){const v=this.value;const o=document.querySelector('[data-testid=validation-message]');if(!v.length){o.textContent='';o.style.color=''}else if(v.length<3){o.textContent='Too short — minimum 3 characters';o.style.color='var(--danger)'}else if(v.length>20){o.textContent='Too long — maximum 20 characters';o.style.color='var(--danger)'}else if(!/^[a-zA-Z0-9]+$/.test(v)){o.textContent='Only letters and numbers allowed';o.style.color='var(--danger)'}else{o.textContent='Valid username';o.style.color='var(--success)'}});
+  </script>
+</body>
+</html>
